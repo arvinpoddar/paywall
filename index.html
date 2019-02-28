@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui" />
+  <title>PayWall 🔒</title>
+  <link rel="stylesheet" type="text/css" href="layout.css" />
+</head>
+
+<body>
+  <h1>PayWall 🔒</h1>
+  <p>
+    Having trouble with clients not paying? Use this tool to generate
+    JavaScript that hides a website's content if the client doesn't pay by a
+    certain date. Read the instructions below to see how to use this tool.
+  </p>
+  <h1>Generate:</h1>
+  <p>
+    Enter the due date for your client's payment, and click the generate
+    button:
+  </p>
+  <input type="date" placeholder="mm/dd/yyyy" maxlength="10" id="dueDate" />
+  <button class="btn-primary" onclick="generate();">Generate</button>
+  <!--<button class="btn-primary" onclick="copyCode();">Copy Code</button>-->
+  <pre><code id="code">Enter a valid date in the box above.</code></pre>
+  <p>
+    Copy and paste this code into a script tag at the bottom of your client's
+    website, or read more below.
+  </p>
+  <h1>Instructions</h1>
+  <script type="text/javascript">
+    function generate() {
+      document.getElementById("code").style.display = "block";
+      var dueDate = document.getElementById("dueDate").value;
+      if (dueDate.trim() == "" || dueDate == undefined) {
+        document.getElementById("code").innerText =
+          "Not a valid date, try again.";
+      } else {
+        document.getElementById("code").innerText =
+          `var today = new Date();` + "\n" +
+          `var dueDate = new Date(` +
+          new Date(dueDate).toISOString().split("T")[0] +
+          `);` + "\n" +
+          `var elements = document.getElementsByTagName("*");` + "\n" + "    " +
+          `if (dueDate < today) {` + "\n" + "    " + "    " +
+          `for (var i = 0; i < elements.length; i++) {` + "\n" + "    " + "    " + "    " +
+          `elements[i].remove();` + "\n" + "    " + "    " +
+          `}` + "\n" + "    " +
+          `document.addEventListener("contextmenu", function (e) {` + "\n" + "    " + "    " +
+          `e.preventDefault(); }, false);` + "\n" + "    " +
+          `alert("This website is down. Come back soon!");` + "\n" +
+          `}`;
+      }
+    }
+
+    function copyCode() {
+      var copyText = document.getElementById("code").innerText;
+      copyText.select();
+      document.execCommand("copy");
+      alert("Code copied!");
+    }
+  </script>
+</body>
+
+</html>
